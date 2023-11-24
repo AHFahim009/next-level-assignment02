@@ -24,7 +24,7 @@ Create an order.model.ts file for the Mongoose Order model.
 
 
 Step 3: User Management
-3.1 Create a new user (done)
+3.1 Create a new user (done) create a new user
 Create a user.controller.ts file for handling user-related logic.
 Create a user.routes.ts file for user-related routes.
 Implement the POST /api/users endpoint to create a new user.

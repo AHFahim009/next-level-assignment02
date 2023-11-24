@@ -1,4 +1,4 @@
-Step 1: Set up the Project
+Step 1: Set up the Project (send in git)
 Create a new Node.js Express project.
 Install necessary packages: express, mongoose, @types/express, @types/mongoose, ts-node, and typescript.
 Create a tsconfig.json file for TypeScript configuration.
@@ -15,7 +15,7 @@ Create a config.ts file for configuration settings.
 Create a MongoDB database using Mongoose for storing user and order data.
 
 
-Step 2: Define Data Models (done)
+Step 2: Define Data Models (done) send in git
 Create a user.interface.ts file for the User interface.
 Create a order.interface.ts file for the Order interface.
 Create a user.model.ts file for the Mongoose User model.

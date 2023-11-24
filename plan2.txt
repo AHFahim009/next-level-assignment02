@@ -15,7 +15,7 @@ Create a config.ts file for configuration settings.
 Create a MongoDB database using Mongoose for storing user and order data.
 
 
-Step 2: Define Data Models (done) send in git
+Step 2: Define Data Models (done) 
 Create a user.interface.ts file for the User interface.
 Create a order.interface.ts file for the Order interface.
 Create a user.model.ts file for the Mongoose User model.

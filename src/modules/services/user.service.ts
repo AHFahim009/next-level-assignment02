@@ -45,20 +45,11 @@ const deleteUser = async (userId: number) => {
 
 // 06. Add New Product in Order
 const addNewProduct = async (userId: number, product: Orders) => {
-  const user = await userModel.findOne({ userId });
-
-  if (!user) {
-    return null;
-  }
-
-  if (!user.orders) {
-    user.orders = [];
-  }
-
-  user.orders.push(product);
-
-  // Save the updated user
-  const result = await user.save();
+  const result = await userModel.findOneAndUpdate(
+    { userId },
+    { $push: { orders: product } },
+    { new: true, select: false }
+  );
 
   return result;
 };
@@ -74,12 +65,12 @@ const getAllOrders = async (userId: number) => {
     throw new Error('You have no orders');
   }
 
-  return userOrder.orders;
+  return { orders: userOrder.orders };
 };
 
 // 08. calculate total price a user
 const calculateTotalPrice = async (userId: number) => {
-  const user = await userModel.findOne({ userId });
+  const user = await userModel.findOne({ userId }).select('+orders');
   if (!user) {
     return null;
   }

@@ -19,8 +19,7 @@ const fullNameSchema = z.object({
 
 const userUpdateSchemaZod = z.object({
   userId: z.number().optional(),
-  username: z.string().min(13).optional(),
-  password: z.string().min(1).optional(),
+  username: z.string().min(1).optional(),
   fullName: fullNameSchema.optional(),
   age: z.number().optional(),
   email: z.string().email().optional(),

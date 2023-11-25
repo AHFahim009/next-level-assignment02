@@ -58,7 +58,7 @@ const userSchema = new Schema<User, UserStaticModel>(
         trim: true,
       },
     },
-    orders: { type: [orderSchema] },
+    orders: { type: [orderSchema], select: false },
   },
   {
     timestamps: true,

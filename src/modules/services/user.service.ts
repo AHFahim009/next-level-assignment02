@@ -11,8 +11,8 @@ const userCreated = async (user: User) => {
   }
   const result = await userModel.create(user);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { password, ...userWithoutPassword } = result.toObject();
-  return userWithoutPassword;
+  const { password, orders, ...refineUser } = result.toObject();
+  return refineUser;
 };
 
 //02. retrieve all users (get)
@@ -65,9 +65,13 @@ const addNewProduct = async (userId: number, product: Orders) => {
 
 // 07. Retrieve all orders for a specific user
 const getAllOrders = async (userId: number) => {
-  const userOrder = await userModel.findOne({ userId: userId });
+  const userOrder = await userModel
+    .findOne({ userId: userId })
+    .select('+orders');
   if (!userOrder) {
     return null;
+  } else if (userOrder.orders?.length === 0) {
+    throw new Error('You have no orders');
   }
 
   return userOrder.orders;

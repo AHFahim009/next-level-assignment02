@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { userService } from '../services/user.service';
 import userSchemaZod from '../validation/user.validation';
+import userUpdateSchemaZod from '../validation/userUpdate.validation';
+import { User } from '../models/interface/user.interface';
 
 //01. create a  user controller
 const createUser = async (req: Request, res: Response) => {
   try {
-    const user = req.body.user;
+    const user = req.body;
 
     // will validate by zod
 
@@ -14,13 +16,13 @@ const createUser = async (req: Request, res: Response) => {
     // connect with service
     const result = await userService.userCreated(userValidatedByZod);
 
-    res.status(200).send({
+    return res.status(201).json({
       success: true,
       message: 'User created successfully!',
       data: result,
     });
-  } catch (err: unknown) {
-    res.status(500).send({
+  } catch (err) {
+    return res.status(500).json({
       success: false,
       warning: (err as Error)?.message,
       message: 'User created failed! try again bro!',
@@ -33,13 +35,13 @@ const createUser = async (req: Request, res: Response) => {
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const result = await userService.getUsers();
-    res.status(200).send({
+    return res.status(200).json({
       success: true,
       message: 'Users fetched successfully!',
       data: result,
     });
   } catch (err) {
-    res.status(500).send({
+    return res.status(500).json({
       success: false,
       message: 'User fetched failed! try again bro!',
       error: err,
@@ -55,7 +57,7 @@ const getSpecificUser = async (req: Request, res: Response) => {
     const result = await userService.getSpecificUser(userId);
 
     if (!result) {
-      res.status(404).send({
+      return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
@@ -64,13 +66,13 @@ const getSpecificUser = async (req: Request, res: Response) => {
         },
       });
     }
-    res.status(200).send({
+    return res.status(200).json({
       success: true,
       message: 'Users fetched successfully!',
       data: result,
     });
   } catch (err) {
-    res.status(500).send({
+    return res.status(500).json({
       error: err,
     });
   }
@@ -82,19 +84,18 @@ const updateUser = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
 
     if (isNaN(userId)) {
-      res.status(404).send({
+      return res.status(404).json({
         message: 'Invalid user ID',
       });
     }
 
-    const updatedUserData = req.body.user;
+    const updatedUserData = req.body;
+    const validateByZod = userUpdateSchemaZod.parse(updatedUserData) as User;
 
-    // const validatedByZod = userSchemaZod.parse(updatedUserData) as User;
-
-    const result = await userService.updateUser(userId, updatedUserData);
+    const result = await userService.updateUser(userId, validateByZod);
 
     if (!result) {
-      res.status(404).send({
+      return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
@@ -104,14 +105,15 @@ const updateUser = async (req: Request, res: Response) => {
       });
     }
 
-    res.status(200).send({
+    return res.status(200).json({
       success: true,
       message: 'User updated successfully!',
       updatedData: updatedUserData,
       data: result,
     });
   } catch (err) {
-    res.status(500).send({
+    return res.status(500).json({
+      cautions: (err as Error)?.message,
       error: err,
     });
   }
@@ -123,7 +125,7 @@ const deleteUser = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
 
     if (isNaN(userId)) {
-      res.status(404).send({
+      return res.status(404).json({
         message: 'Invalid user ID',
       });
     }
@@ -131,7 +133,7 @@ const deleteUser = async (req: Request, res: Response) => {
     const result = await userService.deleteUser(userId);
 
     if (!result) {
-      res.status(404).send({
+      return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
@@ -141,13 +143,13 @@ const deleteUser = async (req: Request, res: Response) => {
       });
     }
 
-    res.status(200).send({
+    return res.status(200).json({
       success: true,
       message: 'User deleted successfully!',
       data: null,
     });
   } catch (err) {
-    res.status(500).send({
+    return res.status(500).json({
       error: err,
     });
   }
@@ -157,7 +159,7 @@ const deleteUser = async (req: Request, res: Response) => {
 const addNewProduct = async (req: Request, res: Response) => {
   try {
     const userId = Number(req.params.userId);
-    const { productName, price, quantity } = req.body.user;
+    const { productName, price, quantity } = req.body;
 
     const orderData = {
       productName,
@@ -167,7 +169,7 @@ const addNewProduct = async (req: Request, res: Response) => {
 
     const result = await userService.addNewProduct(userId, orderData);
     if (!result) {
-      res.status(404).send({
+      return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
@@ -177,13 +179,13 @@ const addNewProduct = async (req: Request, res: Response) => {
       });
     }
 
-    res.status(200).send({
+    return res.status(200).json({
       success: true,
       message: 'User product add successfully!',
       data: result,
     });
   } catch (err) {
-    res.status(500).send({
+    return res.status(500).json({
       error: err,
     });
   }
@@ -195,7 +197,7 @@ const getAllOrders = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
     const result = await userService.getAllOrders(userId);
     if (!result) {
-      res.status(404).send({
+      return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
@@ -205,26 +207,24 @@ const getAllOrders = async (req: Request, res: Response) => {
       });
     }
 
-    res.status(200).send({
+    return res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
       data: result,
     });
   } catch (err) {
-    res.status(500).send({
-      error: err,
+    return res.status(500).json({
+      message: (err as Error)?.message,
     });
   }
 };
 
 const calculateTotalPrice = async (req: Request, res: Response) => {
   try {
-    console.log('hiii');
-
     const userId = Number(req.params.userId);
     const result = await userService.calculateTotalPrice(userId);
     if (!result) {
-      res.status(404).send({
+      return res.status(404).json({
         success: false,
         message: 'User not found',
         error: {
@@ -234,13 +234,13 @@ const calculateTotalPrice = async (req: Request, res: Response) => {
       });
     }
 
-    res.status(200).send({
+    return res.status(200).json({
       success: true,
       message: 'Total price calculated successfully!',
       data: result,
     });
   } catch (err) {
-    res.status(500).send({
+    return res.status(500).json({
       error: err,
     });
   }

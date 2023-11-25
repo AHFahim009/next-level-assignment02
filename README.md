@@ -1,3 +1,5 @@
+vercel link: "https://next-level-assignment2.vercel.app/api/users"
+
 # next-level-Assignment2
 
 Welcome to Assignment2! This project is built with TypeScript and Express, using MongoDB as the database. Below are the steps to run this project on your local machine.

@@ -15,7 +15,7 @@ Create a config.ts file for configuration settings.
 Create a MongoDB database using Mongoose for storing user and order data.
 
 
-Step 2: Define Data Models (done) 
+Step 2: Define Data Models (done) send in git
 Create a user.interface.ts file for the User interface.
 Create a order.interface.ts file for the Order interface.
 Create a user.model.ts file for the Mongoose User model.
@@ -51,7 +51,7 @@ Implement the GET /api/users/:userId/orders/total-price endpoint to calculate th
 
 
 
-Step 5: Validation with Joi/Zod
+Step 5: Validation with Joi/Zod -send in git
 Install joi or zod for data validation.
 Implement validation for user and order creation and updating operations.
 Handle validation errors gracefully and provide meaningful error messages in the API responses.

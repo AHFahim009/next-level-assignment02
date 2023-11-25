@@ -1,7 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 import { User, UserStaticModel } from './interface/user.interface';
 import { orderSchema } from './order.model';
-
+import bcrypt from 'bcrypt';
+import config from '../../config';
 const userSchema = new Schema<User, UserStaticModel>(
   {
     userId: {
@@ -64,6 +65,17 @@ const userSchema = new Schema<User, UserStaticModel>(
     timestamps: true,
   }
 );
+
+// middleware:
+userSchema.pre('save', async function (next) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+  next();
+});
 
 // static schema for userStaticModel:
 

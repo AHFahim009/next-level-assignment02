@@ -108,7 +108,6 @@ const updateUser = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: 'User updated successfully!',
-      updatedData: updatedUserData,
       data: result,
     });
   } catch (err) {
@@ -181,8 +180,8 @@ const addNewProduct = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       success: true,
-      message: 'User product add successfully!',
-      data: result,
+      message: 'Order created successfully!',
+      data: null,
     });
   } catch (err) {
     return res.status(500).json({
